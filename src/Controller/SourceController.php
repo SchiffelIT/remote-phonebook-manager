@@ -11,6 +11,7 @@ namespace App\Controller;
 use App\Form\NewFileForm;
 use App\Form\UploadFileForm;
 use App\Service\XMLFileService;
+use App\Service\GigasetXMLFileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,12 +49,15 @@ class SourceController extends AbstractController
 
                 if($extension == ".xml") {
                     $file['fileToUpload']->move($path, $filename);
+                    $new_filename = $filename;
 
-                    return $this->redirect(
-                        $this->generateUrl('contact', array('name' => $filename))
-                    );
+                    
                 } elseif($extension == ".csv") {
                     $new_filename = substr($filename, 0, -4) . '.xml';
+
+                    if(substr($filename, -8)== ".xml.csv"){
+                        $new_filename = substr($filename, 0, -4);
+                    }
 
                     $file['fileToUpload']->move($path, $filename);
 
@@ -86,14 +90,35 @@ class SourceController extends AbstractController
 
                     unlink($path . '/' . $filename);
 
-                    return $this->redirect(
-                        $this->generateUrl('source')
-                    );
+
                 } else {
                     return $this->redirect(
                         $this->generateUrl('source')
                     );
                 }
+                $XMLPattern = new XMLFileService($new_filename, "pb");
+                $XMLToSave = new GigasetXMLFileService($new_filename, "pb");
+                $data= array("phoneRecords"=>array());
+                foreach($XMLPattern->loadFile()->children() as $entry){
+                    $tmpdata=array("recordName"=>$entry->Name->__toString());
+                    if(is_object($entry->Telephone)){
+                        $tmpdata['phoneNumbers']=array();
+                        foreach($entry->Telephone as $number){
+                            $tmpdata["phoneNumbers"][]=array("phoneNumber"=>$number->__toString());
+                        }
+                    }
+                    else{
+                        $tmpdata['phoneNumbers']=array();
+                        $tmpdata["phoneNumbers"][]=array("phoneNumber"=>$entry->Telephone->__toString());
+                    }
+                    $data["phoneRecords"][]=$tmpdata;
+                }
+                $XMLString = $XMLToSave->generateProperXML($data);
+                $XMLToSave->saveFile($XMLString);
+
+                return $this->redirect(
+                    $this->generateUrl('contact', array('name' => $new_filename))
+                );
             }
         }
 
@@ -146,7 +171,12 @@ class SourceController extends AbstractController
      * @throws
      */
     public function deleteAction(Request $request, $name) {
+        //Yealink
         unlink('pb/' . $name);
+        //Gigaset
+        if(file_exists('pb/gigaset/' . $name)){
+            unlink('pb/gigaset/' . $name);
+        }
 
         return $this->redirect(
             $this->generateUrl('source')
@@ -181,7 +211,7 @@ class SourceController extends AbstractController
             Response::HTTP_OK,
             [
                 'Content-Type' => 'text/csv',
-                'Content-Disposition' => 'attachment; filename="' . $name . '"'
+                'Content-Disposition' => 'attachment; filename="' . $name . '.csv"'
             ]
         );
     }

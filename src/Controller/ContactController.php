@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\XMLFileService;
+use App\Service\GigasetXMLFileService;
 use App\Form\DataEditForm;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Form\Forms;
@@ -122,8 +123,18 @@ class ContactController extends AbstractController
         }
 
         $dataTable = $request->request->all();
-
+        //Yealink
         $XMLPattern = new XMLFileService($fileName, $filePath);
+        $XMLToSave = $XMLPattern->generateProperXML($dataTable['phone_book']);
+
+        if ($createArchive) {
+            $XMLPattern->archiveFile();
+        }
+
+        $XMLPattern->saveFile($XMLToSave);
+
+        //Gigaset
+        $XMLPattern = new GigasetXMLFileService($fileName, $filePath);
         $XMLToSave = $XMLPattern->generateProperXML($dataTable['phone_book']);
 
         if ($createArchive) {

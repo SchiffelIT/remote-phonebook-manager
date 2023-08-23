@@ -15,7 +15,7 @@ Under your host directory clone this Git repository.
 1. In project folder execute commands:
 
     curl -sS https://getcomposer.org/installer | php
-    php composer.phar install
+    composer.phar install
 
 2. Set the server's document root to the public/ folder
 

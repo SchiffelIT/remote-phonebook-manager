@@ -20,3 +20,4 @@ public/pb
 src/Controller/.gitignore
 templates/base.html.twig
 TODO.md
+composer.phar
