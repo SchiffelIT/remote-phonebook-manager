@@ -1,9 +1,9 @@
-Octivi - Yealink PhoneBook Manager
+Remote PhoneBook Manager for Yealink and Gigaset
 =============================================
 
-Simple PHP application to manage your Yealink Remote phone book.
+Simple PHP application to manage your Remote phone book.
 
-Check out the [post about the release](http://labs.octivi.com/yealink-phone-book-manager-released/) on our blog!
+Requirement: Yealink Phones and/or Gigaset Base Stations N870 or N670
 
 Installation
 ---------------------------------------------
