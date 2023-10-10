@@ -110,14 +110,26 @@ class GigasetXMLFileService
         foreach ($users as $user) {
             if ($user['recordName'] !== '') {
                 $tmp = $xml->addChild($recordName);
-                $tmp->addAttribute("name", htmlspecialchars($user['recordName']));
-                $tmp->addAttribute("surname", "");
+                $tmp->addAttribute("home2", "");
+                $tmp->addAttribute("surname", htmlspecialchars($user['recordName']));
+                $tmp->addAttribute("mobile1", "");
+                $tmp->addAttribute("mobile2", "");
+
+                
 
                 for ($i=0; $i<count($user['phoneNumbers']); $i++) {
                     if ($user['phoneNumbers'][$i]['phoneNumber'] !== '') {
                         $tmp->addAttribute("office".($i+1), $user['phoneNumbers'][$i]['phoneNumber']);
                     }
                 }
+
+                if (!isset($tmp["office2"])) {
+                    $tmp->addAttribute("office2", "");
+                }
+
+                $tmp->addAttribute("name", "");
+                $tmp->addAttribute("home1", "");
+
             }
         }
     }
