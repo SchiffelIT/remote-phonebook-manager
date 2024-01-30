@@ -41,6 +41,11 @@ Phonebook backup
 In the same directory as your orginal phonebook file is, the script will create backup files of your phonebook when clicking on the "Create Backup" button.
 
 
+Notes
+---------------------------------------------
+
+In a few cases, if the phone book becomes too large and new entries are no longer saved, the PHP settings must be adjusted. Change the max_input_vars entry in the php.ini file.
+
 Copyright
 ---------------------------------------------
 
