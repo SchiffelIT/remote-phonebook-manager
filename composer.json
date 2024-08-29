@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.2.5",
+        "php": "^8.2.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.10",
@@ -11,11 +11,10 @@
         "symfony/flex": "^1.17.1",
         "symfony/form": "5.4.*",
         "symfony/framework-bundle": "5.4.*",
+        "symfony/runtime": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/yaml": "5.4.*"
-    },
-    "require-dev": {
     },
     "config": {
         "optimize-autoloader": true,
@@ -24,7 +23,8 @@
         },
         "sort-packages": true,
         "allow-plugins": {
-            "symfony/flex": true
+            "symfony/flex": true,
+            "symfony/runtime": true
         }
     },
     "autoload": {
